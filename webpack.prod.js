@@ -1,4 +1,4 @@
-const merge = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const common = require('./webpack.common.js')
 
 module.exports = merge(common, {
@@ -14,12 +14,12 @@ module.exports = merge(common, {
           presets: [
             ['@babel/preset-env', {
               corejs: '3',
-              useBuiltIns: 'usage'
-            }]
+              useBuiltIns: 'usage',
+            }],
           ],
-          plugins: ['@babel/plugin-transform-runtime']
-        }
-      }
-    }]
-  }
+          plugins: ['@babel/plugin-transform-runtime'],
+        },
+      },
+    }],
+  },
 })
