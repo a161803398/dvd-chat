@@ -3,7 +3,7 @@ import { Client } from 'tmi.js'
 
 const qs = new URLSearchParams(location.search)
 const channel = qs.get('channel') || 'hornydragon'
-const speed = Number(qs.get('speed')) / 10 || 0.1
+const speed = Number(qs.get('speed')) || 1
 
 const fontSize = Number(qs.get('font-size')) || 24
 const lineHeight = fontSize + 8
@@ -46,7 +46,7 @@ app.appendChild(chat)
 let lastMs = 0
 function step(currentMs) {
   const passMs = currentMs - lastMs
-  const dMove = speed * passMs
+  const dMove = speed * passMs / 10
 
   let dTop = -Math.sin(deg)
   let dLeft = Math.cos(deg)
@@ -138,7 +138,7 @@ let roomState = {}
 
 printMessage('<span class="info">' + [
   `channel: ${channel}`,
-  `speed: ${speed * 10}`,
+  `speed: ${speed}`,
   `font-size: ${fontSize}`,
   `width: ${rawWidth}`,
   `height: ${rawHeight}`,
