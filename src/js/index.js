@@ -1,7 +1,8 @@
 import '../css/index.css'
+import { Client } from 'tmi.js'
 
-const CHAT_WIDTH = 400
-const CHAT_HEIGHT = 300
+const CHAT_WIDTH = 416
+const CHAT_HEIGHT = 320
 const app = document.getElementById('app')
 const speed = 0.1
 let deg = 2 * Math.PI * (-45 / 360)
@@ -57,3 +58,89 @@ function step(currentMs) {
 }
 
 window.requestAnimationFrame(step)
+
+const client = new Client({
+  connection: {
+    secure: true,
+    reconnect: true,
+  },
+  channels: ['#hornydragon'],
+})
+
+function removeOldMsg(content) {
+  while ((content.offsetTop + content.offsetHeight - content.firstChild.offsetHeight) > app.innerHeight) {
+    content.removeChild(content.firstChild)
+  }
+  content.scrollBy(0, 1000)
+}
+
+function printMessage(html) {
+  const node = document.createElement('div')
+  node.innerHTML = html
+  chat.appendChild(node)
+  removeOldMsg(chat)
+}
+
+client.addListener('message', (channel, tags, message, self) => {
+  console.log(tags)
+  printMessage(`<span style="color: ${tags.color}">${tags['display-name']}</span>: ${parseMessage(message, tags)}`)
+})
+
+function escapeHtml(unsafe) {
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+}
+
+function parseMessage(message, { emotes }) {
+  if (!emotes) {
+    return message
+  }
+  const emoteList = []
+  // flat emotes
+  for (const [id, positions] of Object.entries(emotes)) {
+    for (const position of positions) {
+      const [start, end] = position.split('-')
+      emoteList.push({ id, start: Number(start), len: end - start + 1 })
+    }
+  }
+
+  let pos = 0
+  let outputHtml = ''
+  while (pos < message.length) {
+    const emote = emoteList.find(({ start }) => start === pos)
+    if (emote) {
+      outputHtml += `<img class="emote" src="https://static-cdn.jtvnw.net/emoticons/v1/${emote.id}/3.0">`
+      pos += emote.len
+    } else {
+      outputHtml += escapeHtml(message[pos])
+      pos++
+    }
+  }
+  return outputHtml
+}
+
+let roomState = ''
+
+printMessage('Connecting...')
+
+client.addListener('roomstate', (channel, state) => {
+  if (roomState.channel !== channel) {
+    printMessage(`Connected to ${channel}.`)
+    if (state.slow) {
+      printMessage('State: slow mode.')
+    }
+    if (state['followers-only'] !== -1) {
+      printMessage('State: followers-only mode.')
+    }
+    if (state['emote-only']) {
+      printMessage('State: emote-only mode.')
+    }
+  }
+  roomState = state
+})
+
+client.connect()

@@ -13,6 +13,16 @@ body {
 }
 
 .chat {
-  background-color: red;
   position: fixed;
+  color: white;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: bold;
+  overflow: hidden;
+}
+
+.emote {
+  width: 20px;
+  height: 20px;
 }
