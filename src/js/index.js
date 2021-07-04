@@ -89,7 +89,7 @@ const client = new Client({
 })
 
 function removeOldMsg(content) {
-  while ((content.offsetTop + content.offsetHeight - content.firstChild.offsetHeight) > app.innerHeight) {
+  while (content.children.length > 1 && content.scrollTop > 0) {
     content.removeChild(content.firstChild)
   }
   content.scrollBy(0, 1000)
