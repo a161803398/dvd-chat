@@ -14,7 +14,10 @@ const chatWidth = Math.floor(rawWidth / lineHeight) * lineHeight
 const chatHeight = Math.floor(rawHeight / lineHeight) * lineHeight
 
 const app = document.getElementById('app')
-let deg = 2 * Math.PI * (-45 / 360)
+
+const START_DEG = Math.PI / 180 * 315
+let dTop = -Math.sin(START_DEG)
+let dLeft = Math.cos(START_DEG)
 
 let maxTop = app.clientHeight - chatHeight
 let maxLeft = app.clientWidth - chatWidth
@@ -44,26 +47,46 @@ chat.style.lineHeight = `${lineHeight}px`
 app.appendChild(chat)
 
 let lastMs = 0
+const DECAY_DEG = Math.PI / 180 * 5
+const DEG_90 = Math.PI / 2
+
 function step(currentMs) {
   const passMs = currentMs - lastMs
   const dMove = speed * passMs / 10
-
-  let dTop = -Math.sin(deg)
-  let dLeft = Math.cos(deg)
-
   const newTop = currentTop + dTop * dMove
   const newLeft = currentLeft + dLeft * dMove
 
   updateChatPosition(newTop, newLeft)
 
+  let needChange = false
+
   if (newTop <= 0 || newTop >= maxTop) {
     dTop *= -1 + (Math.random() - 0.5) * 0.1
+    checkHitCorner(currentMs)
+    needChange = true
   }
 
   if (newLeft <= 0 || newLeft >= maxLeft) {
     dLeft *= -1 + (Math.random() - 0.5) * 0.1
+    checkHitCorner(currentMs)
+    needChange = true
   }
-  deg = Math.atan2(-dTop, dLeft)
+  if (needChange) {
+    let deg = Math.atan2(-dTop, dLeft)
+
+    // prevent y decay
+    if (Math.abs(deg) <= DECAY_DEG) {
+      deg *= 2
+    }
+
+    // prevent x decay
+    if (DEG_90 - DECAY_DEG <= deg && deg <= DEG_90 - DECAY_DEG) {
+      deg = (deg - DEG_90) * 2 + DEG_90
+    }
+
+    dTop = -Math.sin(deg)
+    dLeft = Math.cos(deg)
+  }
 
   lastMs = currentMs
   window.requestAnimationFrame(step)
