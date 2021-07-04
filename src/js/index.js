@@ -124,7 +124,7 @@ function parseMessage(message, { emotes }) {
   while (pos < message.length) {
     const emote = emoteList.find(({ start }) => start === pos)
     if (emote) {
-      outputHtml += `<img style="width: ${imageSize}px; height: ${imageSize}px" src="https://static-cdn.jtvnw.net/emoticons/v1/${emote.id}/3.0">`
+      outputHtml += `<img style="width: ${imageSize}px; height: ${imageSize}px" src="https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0">`
       pos += emote.len
     } else {
       outputHtml += escapeHtml(message[pos])
