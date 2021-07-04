@@ -10,8 +10,10 @@ const lineHeight = fontSize + 8
 const imageSize = fontSize - 4
 const rawWidth = Number(qs.get('width')) || 420
 const rawHeight = Number(qs.get('height')) || 320
-const chatWidth = Math.floor(rawWidth / lineHeight) * lineHeight
-const chatHeight = Math.floor(rawHeight / lineHeight) * lineHeight
+const chatMaxWidth = Math.floor(rawWidth / lineHeight) * lineHeight
+const chatMaxHeight = Math.floor(rawHeight / lineHeight) * lineHeight
+let chatWidth = chatMaxWidth
+let chatHeight = chatMaxHeight
 
 const app = document.getElementById('app')
 let deg = 2 * Math.PI * (-45 / 360)
@@ -21,6 +23,13 @@ let maxLeft = app.clientWidth - chatWidth
 
 let currentTop = maxTop / 2
 let currentLeft = maxLeft / 2
+
+function updateSize() {
+  chatWidth = chat.clientWidth
+  chatHeight = chat.clientHeight
+  maxTop = app.clientHeight - chatHeight
+  maxLeft = app.clientWidth - chatWidth
+}
 
 window.addEventListener('resize', () => {
   maxTop = app.clientHeight - chatHeight
@@ -36,8 +45,8 @@ function updateChatPosition(top, left) {
 
 const chat = document.createElement('div')
 chat.className = 'chat'
-chat.style.width = `${chatWidth}px`
-chat.style.height = `${chatHeight}px`
+chat.style.maxWidth = `${chatWidth}px`
+chat.style.maxHeight = `${chatHeight}px`
 chat.style.fontSize = `${fontSize}px`
 chat.style.lineHeight = `${lineHeight}px`
 
@@ -91,6 +100,7 @@ function printMessage(html) {
   node.innerHTML = html
   chat.appendChild(node)
   removeOldMsg(chat)
+  updateSize()
 }
 
 client.addListener('message', (channel, tags, message, self) => {
