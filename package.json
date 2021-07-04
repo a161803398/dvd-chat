@@ -1,0 +1,43 @@
+{
+  "author": "a1618 (Yu-Sing Chen)",
+  "name": "dvd-chat",
+  "version": "0.0.1",
+  "description": "a silly twitch chat capturer",
+  "main": "src/js/main.js",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "cross-env NODE_ENV=development webpack serve --config webpack.dev.js --open",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.prod.js",
+    "lint": "eslint --max-warnings 0 .",
+    "fix": "yarn lint --fix",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.12.5",
+    "core-js": "^3.8.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/plugin-transform-runtime": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "autoprefixer": "^10.2.6",
+    "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^7.0.0",
+    "cross-env": "^7.0.3",
+    "css-loader": "^5.2.6",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.23.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "html-webpack-plugin": "^4.5.1",
+    "mini-css-extract-plugin": "^2.0.0",
+    "postcss-loader": "^6.1.1",
+    "rimraf": "^3.0.2",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.8.0"
+  }
+}
