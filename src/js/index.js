@@ -25,9 +25,39 @@ let maxLeft = app.clientWidth - chatWidth
 let currentTop = maxTop / 2
 let currentLeft = maxLeft / 2
 
+function createCorner(idx, top, left) {
+  const corner = document.createElement('div')
+  corner.className = 'corner'
+  return corner
+}
+
+const corners = [
+  createCorner(),
+  createCorner(),
+  createCorner(),
+  createCorner(),
+]
+
+function updateCorner(idx, top, left) {
+  const corner = corners[idx]
+  corner.style.top = `${top}px`
+  corner.style.left = `${left}px`
+}
+
+function updateCornerPosition() {
+  updateCorner(0, 0, 0)
+  updateCorner(1, 0, app.clientWidth)
+  updateCorner(2, app.clientHeight, 0)
+  updateCorner(3, app.clientHeight, app.clientWidth)
+}
+
+updateCornerPosition()
+corners.forEach(corner => app.appendChild(corner))
+
 window.addEventListener('resize', () => {
   maxTop = app.clientHeight - chatHeight
   maxLeft = app.clientWidth - chatWidth
+  updateCornerPosition()
 })
 
 function updateChatPosition(top, left) {
@@ -47,6 +77,35 @@ chat.style.lineHeight = `${lineHeight}px`
 app.appendChild(chat)
 
 let lastMs = 0
+let lastHitMs = 0
+
+const cornerTimers = []
+
+function delay(cornerId, ms) {
+  clearTimeout(cornerTimers[cornerId])
+  return new Promise(resolve => {
+    cornerTimers[cornerId] = setTimeout(resolve, ms)
+  })
+}
+
+async function checkHitCorner(ms) {
+  if ((ms - lastHitMs) < (10 / speed)) {
+    const hitTop = currentTop < maxTop / 2
+    const hitLeft = currentLeft < maxLeft / 2
+    const cornerId = hitTop ? (hitLeft ? 0 : 1) : (hitLeft ? 3 : 2)
+    const corner = corners[cornerId]
+    corner.classList.remove('fade')
+    corner.classList.add('show')
+
+    await delay(cornerId, 1000)
+    corner.classList.remove('show')
+    corner.classList.add('fade')
+    await delay(cornerId, 10 * 1000)
+    corner.classList.remove('fade')
+  }
+  lastHitMs = ms
+}
+
 const DECAY_DEG = Math.PI / 180 * 5
 const DEG_90 = Math.PI / 2
 

@@ -26,3 +26,25 @@ body {
   display: inline-block;
   color: #b3e283;
 }
+
+.corner {
+  position: fixed;
+  width: 100px;
+  height: 100px;
+  background-color: #ffff00;
+  border-radius: 50%;
+  top: 0;
+  left: 0;
+  box-shadow: #ffff00 0px 0px 100px 100px;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+}
+
+.show {
+  opacity: 1;
+}
+
+.fade {
+  opacity: 0;
+  transition: opacity 10s ease-in-out;
+}
