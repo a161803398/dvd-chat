@@ -18,6 +18,8 @@ body {
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
   font-weight: bold;
   overflow: hidden;
+  word-break: normal;
+  overflow-wrap: anywhere;
 }
 
 .info {

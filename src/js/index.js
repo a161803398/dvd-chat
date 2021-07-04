@@ -80,7 +80,7 @@ const client = new Client({
 })
 
 function removeOldMsg(content) {
-  while (content.children.length > 1 && content.scrollTop > 0) {
+  while (content.children.length > 1 && content.scrollTop > chatHeight) { // keep one message or one screen
     content.removeChild(content.firstChild)
   }
   content.scrollBy(0, 1000)
