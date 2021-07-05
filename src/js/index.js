@@ -106,8 +106,7 @@ async function checkHitCorner(ms) {
   lastHitMs = ms
 }
 
-const DECAY_DEG = Math.PI / 180 * 5
-const DEG_90 = Math.PI / 2
+const MIN_D = 0.2
 
 function step(currentMs) {
   const passMs = currentMs - lastMs
@@ -117,32 +116,30 @@ function step(currentMs) {
 
   updateChatPosition(newTop, newLeft)
 
-  let needChange = false
+  let hasChanged = false
 
   if (newTop <= 0 || newTop >= maxTop) {
     dTop *= -1 + (Math.random() - 0.5) * 0.1
     checkHitCorner(currentMs)
-    needChange = true
+    hasChanged = true
   }
 
   if (newLeft <= 0 || newLeft >= maxLeft) {
     dLeft *= -1 + (Math.random() - 0.5) * 0.1
     checkHitCorner(currentMs)
-    needChange = true
+    hasChanged = true
   }
-  if (needChange) {
-    let deg = Math.atan2(-dTop, dLeft)
 
+  if (hasChanged) {
     // prevent y decay
-    if (Math.abs(deg) <= DECAY_DEG) {
-      deg *= 2
+    if (Math.abs(dTop) < MIN_D) {
+      dTop = dTop > 0 ? MIN_D : -MIN_D
     }
-
     // prevent x decay
-    if (DEG_90 - DECAY_DEG <= deg && deg <= DEG_90 - DECAY_DEG) {
-      deg = (deg - DEG_90) * 2 + DEG_90
+    if (Math.abs(dLeft) < MIN_D) {
+      dLeft = dLeft > 0 ? MIN_D : -MIN_D
     }
-
+    const deg = Math.atan2(-dTop, dLeft)
     dTop = -Math.sin(deg)
     dLeft = Math.cos(deg)
   }
