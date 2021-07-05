@@ -152,6 +152,8 @@ async function checkHitCorner(ms) {
 
 const MIN_D = 0.2
 
+let requestId = 0
+
 function step(currentMs) {
   const passMs = currentMs - lastMs
   const dMove = speed * passMs / 10
@@ -189,10 +191,20 @@ function step(currentMs) {
   }
 
   lastMs = currentMs
-  window.requestAnimationFrame(step)
+  requestId = window.requestAnimationFrame(step)
 }
 
-window.requestAnimationFrame(step)
+requestId = window.requestAnimationFrame(step)
+
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') {
+    lastMs = performance.now()
+    window.cancelAnimationFrame(requestId)
+    requestId = window.requestAnimationFrame(step)
+  } else {
+    window.cancelAnimationFrame(requestId)
+  }
+})
 
 const client = new Client({
   connection: {
