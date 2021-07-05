@@ -25,9 +25,15 @@ let maxLeft = app.clientWidth - chatWidth
 let currentTop = maxTop / 2
 let currentLeft = maxLeft / 2
 
-function createCorner(idx, top, left) {
+const counterFontSize = Number(qs.get('counter-size')) || 32
+const counterPadding = Number(qs.get('counter-padding')) || 12
+const counterWidth = counterFontSize * 4
+const counterHeight = counterFontSize + counterPadding
+
+function createCorner() {
   const corner = document.createElement('div')
   corner.className = 'corner'
+  app.appendChild(corner)
   return corner
 }
 
@@ -52,12 +58,48 @@ function updateCornerPosition() {
 }
 
 updateCornerPosition()
-corners.forEach(corner => app.appendChild(corner))
+
+function createCornerCounter(alignLeft = true) {
+  const counter = document.createElement('div')
+  counter.className = 'counter'
+  counter.style.width = `${counterWidth}px`
+  counter.style.height = `${counterHeight}px`
+  counter.style.lineHeight = `${counterHeight}px`
+  counter.style.fontSize = `${counterFontSize}px`
+  counter.style.textAlign = alignLeft ? 'left' : 'right'
+  counter.style.padding = `0 ${counterPadding}px`
+  counter.innerText = 0
+  app.appendChild(counter)
+  return counter
+}
+
+const counters = [
+  createCornerCounter(),
+  createCornerCounter(false),
+  createCornerCounter(),
+  createCornerCounter(false),
+]
+
+function updateCounter(idx, top, left) {
+  const corner = counters[idx]
+  corner.style.top = `${top}px`
+  corner.style.left = `${left}px`
+}
+
+function updateCounterPosition() {
+  updateCounter(0, 0, 0)
+  updateCounter(1, 0, app.clientWidth - counterWidth)
+  updateCounter(2, app.clientHeight - counterHeight, 0)
+  updateCounter(3, app.clientHeight - counterHeight, app.clientWidth - counterWidth)
+}
+
+updateCounterPosition()
 
 window.addEventListener('resize', () => {
   maxTop = app.clientHeight - chatHeight
   maxLeft = app.clientWidth - chatWidth
   updateCornerPosition()
+  updateCounterPosition()
 })
 
 function updateChatPosition(top, left) {
@@ -92,7 +134,9 @@ async function checkHitCorner(ms) {
   if ((ms - lastHitMs) < (10 / speed)) {
     const hitTop = currentTop < maxTop / 2
     const hitLeft = currentLeft < maxLeft / 2
-    const cornerId = hitTop ? (hitLeft ? 0 : 1) : (hitLeft ? 3 : 2)
+    const cornerId = hitTop ? (hitLeft ? 0 : 1) : (hitLeft ? 2 : 3)
+    const counter = counters[cornerId]
+    counter.innerText = Number(counter.innerText) + 1
     const corner = corners[cornerId]
     corner.classList.remove('fade')
     corner.classList.add('show')
