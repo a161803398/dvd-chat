@@ -1,5 +1,8 @@
 import '../css/index.css'
 import { Client } from 'tmi.js'
+import { Howl } from 'howler'
+import hit from '../assets/hit.ogg'
+const hitSound = new Howl({ src: hit })
 
 const qs = new URLSearchParams(location.search)
 const channel = qs.get('channel') || 'hornydragon'
@@ -138,6 +141,7 @@ async function checkHitCorner(ms) {
     const counter = counters[cornerId]
     counter.innerText = Number(counter.innerText) + 1
     const corner = corners[cornerId]
+    hitSound.play()
     corner.classList.remove('fade')
     corner.classList.add('show')
 

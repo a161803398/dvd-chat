@@ -1,6 +1,5 @@
 const path = require('path')
 const HtmlPlugin = require('html-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
@@ -24,16 +23,15 @@ module.exports = {
             },
           },
         }],
+    }, {
+      test: /\.(ogg|mp3|wav|m4a|mpe?g)$/i,
+      loader: 'file-loader',
+      options: { name: 'sounds/[name].[contenthash:8].[ext]' },
     }],
   },
   target: 'web',
   plugins: [
     new CleanWebpackPlugin(),
-    new CopyWebpackPlugin({
-      patterns: [
-        { from: 'assets/', to: 'assets/' },
-      ],
-    }),
     new HtmlPlugin({
       file: path.join(__dirname, 'dist', 'index.html'),
       template: './index.html',
