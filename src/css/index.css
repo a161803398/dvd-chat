@@ -34,7 +34,7 @@ body {
   background-color: #ffff00;
   border-radius: 50%;
   box-shadow: #ffff00 0px 0px 100px 100px;
-  transform: translate(-50%, -50%);
+  margin: -50px 0 0 -50px;
   opacity: 0;
 }
 

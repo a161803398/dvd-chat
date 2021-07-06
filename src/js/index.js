@@ -18,9 +18,18 @@ const chatHeight = Math.floor(rawHeight / lineHeight) * lineHeight
 
 const app = document.getElementById('app')
 
-const START_DEG = Math.PI / 180 * 315
-let dTop = -Math.sin(START_DEG)
-let dLeft = Math.cos(START_DEG)
+function normalizeD() {
+  const hypotenuse = Math.sqrt(dTop * dTop + dLeft * dLeft)
+  dTop /= hypotenuse
+  dLeft /= hypotenuse
+}
+
+const RAND_RATE = 0.1
+
+let dTop = 1 + (Math.random() - 0.5) * RAND_RATE
+let dLeft = 1 + (Math.random() - 0.5) * RAND_RATE
+
+normalizeD()
 
 let maxTop = app.clientHeight - chatHeight
 let maxLeft = app.clientWidth - chatWidth
@@ -28,6 +37,7 @@ let maxLeft = app.clientWidth - chatWidth
 let currentTop = maxTop / 2
 let currentLeft = maxLeft / 2
 
+const threshold = Number(qs.get('threshold')) || 100
 const counterFontSize = Number(qs.get('counter-size')) || 32
 const counterPadding = Number(qs.get('counter-padding')) || 12
 const counterWidth = counterFontSize * 4
@@ -48,9 +58,7 @@ const corners = [
 ]
 
 function updateCorner(idx, top, left) {
-  const corner = corners[idx]
-  corner.style.top = `${top}px`
-  corner.style.left = `${left}px`
+  corners[idx].style.transform = `translate(${left}px, ${top}px)`
 }
 
 function updateCornerPosition() {
@@ -84,9 +92,7 @@ const counters = [
 ]
 
 function updateCounter(idx, top, left) {
-  const corner = counters[idx]
-  corner.style.top = `${top}px`
-  corner.style.left = `${left}px`
+  counters[idx].style.transform = `translate(${left}px, ${top}px)`
 }
 
 function updateCounterPosition() {
@@ -108,8 +114,7 @@ window.addEventListener('resize', () => {
 function updateChatPosition(top, left) {
   currentTop = Math.min(Math.max(top, 0), maxTop)
   currentLeft = Math.min(Math.max(left, 0), maxLeft)
-  chat.style.top = `${currentTop}px`
-  chat.style.left = `${currentLeft}px`
+  chat.style.transform = `translate(${currentLeft}px, ${currentTop}px)`
 }
 
 const chat = document.createElement('div')
@@ -134,7 +139,7 @@ function delay(cornerId, ms) {
 }
 
 async function checkHitCorner(ms) {
-  if ((ms - lastHitMs) < (10 / speed)) {
+  if ((ms - lastHitMs) < (threshold / speed)) {
     const hitTop = currentTop < maxTop / 2
     const hitLeft = currentLeft < maxLeft / 2
     const cornerId = hitTop ? (hitLeft ? 0 : 1) : (hitLeft ? 2 : 3)
@@ -154,7 +159,7 @@ async function checkHitCorner(ms) {
   lastHitMs = ms
 }
 
-const MIN_D = 0.2
+const MIN_D = 0.3
 
 let requestId = 0
 
@@ -169,13 +174,13 @@ function step(currentMs) {
   let hasChanged = false
 
   if (newTop <= 0 || newTop >= maxTop) {
-    dTop *= -1 + (Math.random() - 0.5) * 0.1
+    dTop *= -1 + (Math.random() - 0.5) * RAND_RATE
     checkHitCorner(currentMs)
     hasChanged = true
   }
 
   if (newLeft <= 0 || newLeft >= maxLeft) {
-    dLeft *= -1 + (Math.random() - 0.5) * 0.1
+    dLeft *= -1 + (Math.random() - 0.5) * RAND_RATE
     checkHitCorner(currentMs)
     hasChanged = true
   }
@@ -189,9 +194,7 @@ function step(currentMs) {
     if (Math.abs(dLeft) < MIN_D) {
       dLeft = dLeft > 0 ? MIN_D : -MIN_D
     }
-    const deg = Math.atan2(-dTop, dLeft)
-    dTop = -Math.sin(deg)
-    dLeft = Math.cos(deg)
+    normalizeD()
   }
 
   lastMs = currentMs
