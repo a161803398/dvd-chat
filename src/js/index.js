@@ -79,7 +79,6 @@ function createCornerCounter(alignLeft = true) {
   counter.style.fontSize = `${counterFontSize}px`
   counter.style.textAlign = alignLeft ? 'left' : 'right'
   counter.style.padding = `0 ${counterPadding}px`
-  counter.innerText = 0
   app.appendChild(counter)
   return counter
 }
@@ -105,6 +104,7 @@ function updateCounterPosition() {
 updateCounterPosition()
 
 window.addEventListener('resize', () => {
+  lastHitMs = 0 // prevent false hit effect
   maxTop = app.clientHeight - chatHeight
   maxLeft = app.clientWidth - chatWidth
   updateCornerPosition()
