@@ -2,11 +2,12 @@ import '../css/index.css'
 import { Client } from 'tmi.js'
 import { Howl } from 'howler'
 import hit from '../assets/hit.ogg'
-const hitSound = new Howl({ src: hit })
 
 const qs = new URLSearchParams(location.search)
 const channel = qs.get('channel') || 'hornydragon'
 const speed = Number(qs.get('speed')) || 1
+const volume = Number(qs.get('volume')) || 1
+const hitSound = new Howl({ src: hit, volume })
 
 const fontSize = Number(qs.get('font-size')) || 24
 const lineHeight = fontSize + 8
