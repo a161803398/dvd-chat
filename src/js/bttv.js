@@ -1,4 +1,3 @@
-
 export const bttvEmotesMap = new Map()
 
 export async function fetcthBttvGlobalEmotes() {

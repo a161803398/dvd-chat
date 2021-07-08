@@ -30,10 +30,15 @@ export function parseMessage(message, { emotes }) {
       }
     }
   }
-
   for (const [code, id] of bttvEmotesMap.entries()) {
     for (const start of findAllIndexes(message, code)) {
-      emoteList.push({ id, start, len: id.length, type: 'bttv' })
+      const end = start + code.length
+      if (
+        (start === 0 || message[start - 1] === ' ') &&
+        (end === message.length || message[end] === ' ')
+      ) {
+        emoteList.push({ id, start, len: code.length, type: 'bttv' })
+      }
     }
   }
 
