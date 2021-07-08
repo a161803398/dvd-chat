@@ -6,7 +6,7 @@ export const app = document.getElementById('app')
 const qs = new URLSearchParams(location.search)
 export const channel = qs.get('channel') || 'hornydragon'
 export const speed = Number(qs.get('speed')) || 1
-export const volume = Number(qs.get('volume')) || 1
+export const volume = Number(qs.get('volume') || 1)
 export const hitSound = new Howl({ src: hit, volume })
 
 export const fontSize = Number(qs.get('font-size')) || 24

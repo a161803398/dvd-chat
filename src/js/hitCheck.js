@@ -1,4 +1,4 @@
-import { hitSound, threshold, speed } from './define'
+import { hitSound, threshold, speed, volume } from './define'
 import { currentTop, currentLeft, maxTop, maxLeft } from './chat'
 import { counters } from './counter'
 import { corners } from './corner'
@@ -21,7 +21,9 @@ export async function checkHitCorner(ms) {
     const counter = counters[cornerId]
     counter.innerText = Number(counter.innerText) + 1
     const corner = corners[cornerId]
-    hitSound.play()
+    if (volume > 0) {
+      hitSound.play()
+    }
     corner.classList.remove('fade')
     corner.classList.add('show')
 
