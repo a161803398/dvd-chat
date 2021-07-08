@@ -9,6 +9,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack serve --config webpack.dev.js --open",
     "build": "cross-env NODE_ENV=production webpack --config webpack.prod.js",
+    "release": "npm run build && node ./scripts/publish.js",
     "lint": "eslint --max-warnings 0 .",
     "fix": "yarn lint --fix",
     "clean": "rimraf dist"
@@ -33,6 +34,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "file-loader": "^6.2.0",
+    "gh-pages": "^3.2.3",
     "html-webpack-plugin": "^4.5.1",
     "mini-css-extract-plugin": "^2.0.0",
     "postcss-loader": "^6.1.1",
