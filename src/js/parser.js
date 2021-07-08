@@ -1,14 +1,6 @@
 import { imageSize } from './define'
 import { bttvEmotesMap, getBttvImg } from './bttv'
-
-function escapeHtml(unsafe) {
-  return unsafe
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;')
-}
+import { escapeHtml } from './utils'
 
 function findAllIndexes(str, val) {
   const indexes = []

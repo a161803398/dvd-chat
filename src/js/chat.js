@@ -1,4 +1,5 @@
 import { app, chatWidth, chatHeight, fontSize, lineHeight } from './define'
+import { minMax } from './utils'
 
 export let maxTop = app.clientHeight - chatHeight
 export let maxLeft = app.clientWidth - chatWidth
@@ -21,8 +22,8 @@ chat.style.lineHeight = `${lineHeight}px`
 app.appendChild(chat)
 
 export function updateChatPosition(top = currentTop, left = currentLeft) {
-  currentTop = Math.min(Math.max(top, 0), maxTop)
-  currentLeft = Math.min(Math.max(left, 0), maxLeft)
+  currentTop = minMax(top, 0, maxTop)
+  currentLeft = minMax(left, 0, maxLeft)
   chat.style.transform = `translate(${currentLeft}px, ${currentTop}px)`
 }
 
