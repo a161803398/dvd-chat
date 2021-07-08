@@ -27,6 +27,21 @@ module.exports = {
       test: /\.(ogg|mp3|wav|m4a|mpe?g)$/i,
       loader: 'file-loader',
       options: { name: 'sounds/[name].[contenthash:8].[ext]' },
+    }, {
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            ['@babel/preset-env', {
+              corejs: '3',
+              useBuiltIns: 'usage',
+            }],
+          ],
+          plugins: ['@babel/plugin-transform-runtime'],
+        },
+      },
     }],
   },
   target: 'web',
