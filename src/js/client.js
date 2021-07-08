@@ -1,8 +1,8 @@
 import { Client } from 'tmi.js'
-import { channel, speed, fontSize, rawWidth, rawHeight } from './define'
-import { parseMessage } from './parser'
-import { print } from './chat'
 import { fetcthBttvChannelEmotes, fetcthBttvGlobalEmotes } from './bttv'
+import { print } from './chat'
+import { channel, counterFontSize, fontSize, rawHeight, rawWidth, speed, volume } from './define'
+import { parseMessage } from './parser'
 
 const client = new Client({
   connection: {
@@ -43,7 +43,9 @@ export function connect() {
     `font-size: ${fontSize}`,
     `width: ${rawWidth}`,
     `height: ${rawHeight}`,
-  ].join('</span>, <span class="info">') + '</span>')
+    `volume: ${volume}`,
+    `counter-size: ${counterFontSize}`,
+  ].join('</span> <span class="info">') + '</span>')
 
   print('Connecting...')
   fetcthBttvGlobalEmotes()
