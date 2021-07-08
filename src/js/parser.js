@@ -1,4 +1,5 @@
 import { imageSize } from './define'
+import { bttvEmotesMap, getBttvImg } from './bttv'
 
 function escapeHtml(unsafe) {
   return unsafe
@@ -9,16 +10,30 @@ function escapeHtml(unsafe) {
     .replace(/'/g, '&#039;')
 }
 
-export function parseMessage(message, { emotes }) {
-  if (!emotes) {
-    return message
+function findAllIndexes(str, val) {
+  const indexes = []
+  let i = -val.length
+  while ((i = str.indexOf(val, i + val.length)) !== -1) {
+    indexes.push(i)
   }
+  return indexes
+}
+
+export function parseMessage(message, { emotes }) {
   const emoteList = []
+  if (emotes) {
   // flat emotes
-  for (const [id, positions] of Object.entries(emotes)) {
-    for (const position of positions) {
-      const [start, end] = position.split('-')
-      emoteList.push({ id, start: Number(start), len: end - start + 1 })
+    for (const [id, positions] of Object.entries(emotes)) {
+      for (const position of positions) {
+        const [start, end] = position.split('-')
+        emoteList.push({ id, start: Number(start), len: end - start + 1, type: 'twitch' })
+      }
+    }
+  }
+
+  for (const [code, id] of bttvEmotesMap.entries()) {
+    for (const start of findAllIndexes(message, code)) {
+      emoteList.push({ id, start, len: id.length, type: 'bttv' })
     }
   }
 
@@ -27,7 +42,8 @@ export function parseMessage(message, { emotes }) {
   while (pos < message.length) {
     const emote = emoteList.find(({ start }) => start === pos)
     if (emote) {
-      outputHtml += `<img style="width: ${imageSize}px; height: ${imageSize}px" src="https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0">`
+      const imgSrc = emote.type === 'twitch' ? `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0` : getBttvImg(emote.id)
+      outputHtml += `<img style="width: ${imageSize}px; height: ${imageSize}px" src="${imgSrc}">`
       pos += emote.len
     } else {
       outputHtml += escapeHtml(message[pos])
