@@ -11,7 +11,7 @@ export const hitSound = new Howl({ src: hit, volume })
 
 export const fontSize = Number(qs.get('font-size')) || 24
 export const lineHeight = fontSize + 8
-export const imageSize = fontSize - 4
+export const imageSize = fontSize
 export const rawWidth = Number(qs.get('width')) || 420
 export const rawHeight = Number(qs.get('height')) || 320
 export const chatWidth = Math.floor(rawWidth / lineHeight) * lineHeight
