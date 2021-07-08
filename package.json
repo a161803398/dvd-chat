@@ -1,7 +1,7 @@
 {
   "author": "a1618 (Yu-Sing Chen)",
   "name": "dvd-chat",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "a silly twitch chat capturer",
   "main": "src/js/main.js",
   "license": "UNLICENSED",
