@@ -24,5 +24,7 @@ document.addEventListener('visibilitychange', function() {
     stopMoving()
   }
 })
-startMoving()
+if (document.visibilityState === 'visible') {
+  startMoving()
+}
 connect()
