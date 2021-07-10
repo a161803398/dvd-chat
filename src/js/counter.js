@@ -14,7 +14,7 @@ function createCornerCounter(alignLeft = true) {
   counter.style.lineHeight = `${counterHeight}px`
   counter.style.fontSize = `${counterFontSize}px`
   counter.style.textAlign = alignLeft ? 'left' : 'right'
-  counter.style.justifyContent = alignLeft ? 'flex-start' : 'flex-end'
+  counter.style.flexDirection = alignLeft ? 'row' : 'row-reverse'
   counter.style.padding = `0 ${counterPadding}px`
   app.appendChild(counter)
   return counter
