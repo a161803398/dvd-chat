@@ -1,6 +1,7 @@
-import { app, counterWidth, counterHeight, counterFontSize, counterPadding } from './define'
+import { app, counterHeight, counterFontSize, counterPadding } from './define'
 
 const counts = [0, 0, 0, 0]
+const sessionCounts = [0, 0, 0, 0]
 
 function saveCounts() {
   localStorage.setItem('counts', JSON.stringify(counts))
@@ -9,11 +10,11 @@ function saveCounts() {
 function createCornerCounter(alignLeft = true) {
   const counter = document.createElement('div')
   counter.className = 'counter'
-  counter.style.width = `${counterWidth}px`
   counter.style.height = `${counterHeight}px`
   counter.style.lineHeight = `${counterHeight}px`
   counter.style.fontSize = `${counterFontSize}px`
   counter.style.textAlign = alignLeft ? 'left' : 'right'
+  counter.style.justifyContent = alignLeft ? 'flex-start' : 'flex-end'
   counter.style.padding = `0 ${counterPadding}px`
   app.appendChild(counter)
   return counter
@@ -25,6 +26,18 @@ const counters = [
   createCornerCounter(),
   createCornerCounter(false),
 ]
+
+function updateCounterText(idx) {
+  counters[idx].innerHTML = ''
+  counters[idx].appendChild(document.createTextNode(sessionCounts[idx]))
+
+  const totalCount = document.createElement('span')
+  totalCount.style.fontSize = `${counterFontSize * 0.6}px`
+  totalCount.style.margin = '0 10px'
+  totalCount.innerText = `(${counts[idx]})`
+
+  counters[idx].appendChild(totalCount)
+}
 
 function loadCountHistory() {
   try {
@@ -40,18 +53,24 @@ function loadCountHistory() {
 
 loadCountHistory()
 
-function updateCounter(idx, top, left) {
-  counters[idx].style.transform = `translate(${left}px, ${top}px)`
+for (let i = 0; i < counts.length; i++) {
+  updateCounterText(i)
+}
+
+function updateCounter(idx, top) {
+  counters[idx].style.transform = `translate(0, ${top}px)`
 }
 
 export function updateCounterPosition() {
-  updateCounter(0, 0, 0)
-  updateCounter(1, 0, app.clientWidth - counterWidth)
-  updateCounter(2, app.clientHeight - counterHeight, 0)
-  updateCounter(3, app.clientHeight - counterHeight, app.clientWidth - counterWidth)
+  updateCounter(0, 0)
+  updateCounter(1, 0)
+  updateCounter(2, app.clientHeight - counterHeight)
+  updateCounter(3, app.clientHeight - counterHeight)
 }
 
 export function increaseCount(idx) {
-  counters[idx].innerText = ++counts[idx]
+  sessionCounts[idx]++
+  counts[idx]++
+  updateCounterText(idx)
   saveCounts()
 }
