@@ -15,7 +15,7 @@ let dLeft = 1 + (Math.random() - 0.5) * RAND_RATE
 
 normalizeD()
 
-const MIN_D = 0.3
+const MIN_D = 0.2
 
 let requestId = 0
 

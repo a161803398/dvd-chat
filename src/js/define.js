@@ -22,5 +22,5 @@ export const RAND_RATE = 0.1
 export const threshold = Number(qs.get('threshold')) || 100
 export const counterFontSize = Number(qs.get('counter-size')) || 32
 export const counterPadding = Number(qs.get('counter-padding')) || 12
-export const counterWidth = counterFontSize * 4
+export const counterWidth = counterFontSize * 8
 export const counterHeight = counterFontSize + counterPadding
