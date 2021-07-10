@@ -52,9 +52,12 @@ body {
 
 .counter {
   position: fixed;
+  width: 100vw;
   color: white;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
 }
 
 
