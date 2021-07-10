@@ -1,5 +1,6 @@
 import { imageSize } from './define'
 import { bttvEmotesMap, getBttvImg } from './bttv'
+import { ffzEmotesMap, getFfzImg } from './ffz'
 import { escapeHtml } from './utils'
 
 function findAllIndexes(str, val) {
@@ -9,6 +10,20 @@ function findAllIndexes(str, val) {
     indexes.push(i)
   }
   return indexes
+}
+
+function putEmotes(tar, src, message, type) {
+  for (const [code, id] of src.entries()) {
+    for (const start of findAllIndexes(message, code)) {
+      const end = start + code.length
+      if (
+        (start === 0 || message[start - 1] === ' ') &&
+        (end === message.length || message[end] === ' ')
+      ) {
+        tar.push({ id, start, len: code.length, type })
+      }
+    }
+  }
 }
 
 export function parseMessage(message, { emotes }) {
@@ -22,24 +37,18 @@ export function parseMessage(message, { emotes }) {
       }
     }
   }
-  for (const [code, id] of bttvEmotesMap.entries()) {
-    for (const start of findAllIndexes(message, code)) {
-      const end = start + code.length
-      if (
-        (start === 0 || message[start - 1] === ' ') &&
-        (end === message.length || message[end] === ' ')
-      ) {
-        emoteList.push({ id, start, len: code.length, type: 'bttv' })
-      }
-    }
-  }
+  putEmotes(emoteList, bttvEmotesMap, message, 'bttv')
+  putEmotes(emoteList, ffzEmotesMap, message, 'ffz')
 
   let pos = 0
   let outputHtml = ''
   while (pos < message.length) {
     const emote = emoteList.find(({ start }) => start === pos)
     if (emote) {
-      const imgSrc = emote.type === 'twitch' ? `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0` : getBttvImg(emote.id)
+      const imgSrc = emote.type === 'twitch'
+        ? `https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/1.0`
+        : emote.type === 'bttv' ? getBttvImg(emote.id) : getFfzImg(emote.id)
+
       outputHtml += `<img style="width: ${imageSize}px; height: ${imageSize}px" src="${imgSrc}">`
       pos += emote.len
     } else {

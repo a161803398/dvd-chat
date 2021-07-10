@@ -1,5 +1,6 @@
 import { Client } from 'tmi.js'
 import { fetcthBttvChannelEmotes, fetcthBttvGlobalEmotes } from './bttv'
+import { fetcthFfzChannelEmotes } from './ffz'
 import { print } from './chat'
 import { channel, counterFontSize, fontSize, rawHeight, rawWidth, speed, volume } from './define'
 import { parseMessage } from './parser'
@@ -30,8 +31,11 @@ client.addListener('roomstate', async (channel, state) => {
     if (state['emote-only']) {
       print('State: emote-only mode.')
     }
-    await fetcthBttvChannelEmotes(state['room-id'])
-    print('BTTV channel emotes info fetched.')
+    await Promise.all([
+      fetcthBttvChannelEmotes(state['room-id']),
+      fetcthFfzChannelEmotes(state['room-id']),
+    ])
+    print('BTTV and FFZ channel emotes info fetched.')
   }
   roomState = state
 })
