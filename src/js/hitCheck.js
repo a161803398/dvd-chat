@@ -1,6 +1,6 @@
 import { hitSound, threshold, speed, volume } from './define'
 import { currentTop, currentLeft, maxTop, maxLeft } from './chat'
-import { counters } from './counter'
+import { increaseCount } from './counter'
 import { corners } from './corner'
 
 let lastHitMs = 0
@@ -18,8 +18,7 @@ export async function checkHitCorner(ms) {
     const hitTop = currentTop < maxTop / 2
     const hitLeft = currentLeft < maxLeft / 2
     const cornerId = hitTop ? (hitLeft ? 0 : 1) : (hitLeft ? 2 : 3)
-    const counter = counters[cornerId]
-    counter.innerText = Number(counter.innerText) + 1
+    increaseCount(cornerId)
     const corner = corners[cornerId]
     if (volume > 0) {
       hitSound.play()
