@@ -23,5 +23,3 @@ export async function fetchGlobalBadges() {
 export async function fetchChannelBadges(roomId) {
   await fetchBadgesFromUrl(`https://badges.twitch.tv/v1/badges/channels/${roomId}/display`)
 }
-
-window.badges = badges

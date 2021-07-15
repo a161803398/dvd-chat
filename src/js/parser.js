@@ -63,7 +63,9 @@ export function parseMessage(message, { emotes }) {
 export function parseBadges(badgesInfo) {
   return badgesInfo
     ? Object.entries(badgesInfo)
-      .map(([key, value]) => `<img style="width: ${imageSize}px; height: ${imageSize}px" src="${badges.get(key).get(value)}">`)
+      .map(([key, value]) => badges.get(key)?.get(value))
+      .filter(url => url) // TODO: find out why some url is undefined
+      .map(url => `<img style="width: ${imageSize}px; height: ${imageSize}px" src="${url}">`)
       .join(' ') + ' '
     : ''
 }
