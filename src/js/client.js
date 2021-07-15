@@ -3,6 +3,7 @@ import { fetchBttvChannelEmotes, fetchBttvGlobalEmotes } from './bttv'
 import { fetchFfzChannelEmotes } from './ffz'
 import { fetchGlobalBadges, fetchChannelBadges } from './badge'
 import { print } from './chat'
+import { getColor } from './color'
 import { channel, counterFontSize, fontSize, rawHeight, rawWidth, speed, volume } from './define'
 import { parseBadges, parseMessage } from './parser'
 
@@ -15,7 +16,7 @@ const client = new Client({
 })
 
 client.addListener('message', (channel, tags, message, self) => {
-  print(parseBadges(tags.badges) + `<span style="color: ${tags.color ?? '#f0e68c'}">${tags['display-name']}</span>: ${parseMessage(message, tags)}`)
+  print(parseBadges(tags.badges) + `<span style="color: ${tags.color ?? getColor(tags['display-name'])}">${tags['display-name']}</span>: ${parseMessage(message, tags)}`)
 })
 
 let roomState = {}
