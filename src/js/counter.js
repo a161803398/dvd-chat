@@ -32,7 +32,7 @@ function updateCounterText(idx) {
   counters[idx].appendChild(document.createTextNode(sessionCounts[idx]))
 
   const totalCount = document.createElement('span')
-  totalCount.style.fontSize = `${counterFontSize * 0.6}px`
+  totalCount.style.fontSize = `${counterFontSize * 0.7}px`
   totalCount.style.margin = '0 10px'
   totalCount.innerText = `(${counts[idx]})`
 
