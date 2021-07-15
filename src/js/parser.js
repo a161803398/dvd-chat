@@ -2,6 +2,7 @@ import { imageSize } from './define'
 import { bttvEmotesMap, getBttvImg } from './bttv'
 import { ffzEmotesMap, getFfzImg } from './ffz'
 import { escapeHtml } from './utils'
+import { badges } from './badge'
 
 function findAllIndexes(str, val) {
   const indexes = []
@@ -57,4 +58,12 @@ export function parseMessage(message, { emotes }) {
     }
   }
   return outputHtml
+}
+
+export function parseBadges(badgesInfo) {
+  return badgesInfo
+    ? Object.entries(badgesInfo)
+      .map(([key, value]) => `<img style="width: ${imageSize}px; height: ${imageSize}px" src="${badges.get(key).get(value)}">`)
+      .join(' ') + ' '
+    : ''
 }

@@ -1,6 +1,6 @@
 export const ffzEmotesMap = new Map()
 
-export async function fetcthFfzChannelEmotes(roomId) {
+export async function fetchFfzChannelEmotes(roomId) {
   const response = await fetch(`https://api.betterttv.net/3/cached/frankerfacez/users/twitch/${roomId}`)
   const data = await response.json()
   data.forEach(({ code, id }) => {

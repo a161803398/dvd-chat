@@ -1,9 +1,10 @@
 import { Client } from 'tmi.js'
-import { fetcthBttvChannelEmotes, fetcthBttvGlobalEmotes } from './bttv'
-import { fetcthFfzChannelEmotes } from './ffz'
+import { fetchBttvChannelEmotes, fetchBttvGlobalEmotes } from './bttv'
+import { fetchFfzChannelEmotes } from './ffz'
+import { fetchGlobalBadges, fetchChannelBadges } from './badge'
 import { print } from './chat'
 import { channel, counterFontSize, fontSize, rawHeight, rawWidth, speed, volume } from './define'
-import { parseMessage } from './parser'
+import { parseBadges, parseMessage } from './parser'
 
 const client = new Client({
   connection: {
@@ -14,10 +15,15 @@ const client = new Client({
 })
 
 client.addListener('message', (channel, tags, message, self) => {
-  print(`<span style="color: ${tags.color ?? '#f0e68c'}">${tags['display-name']}</span>: ${parseMessage(message, tags)}`)
+  print(parseBadges(tags.badges) + `<span style="color: ${tags.color ?? '#f0e68c'}">${tags['display-name']}</span>: ${parseMessage(message, tags)}`)
 })
 
 let roomState = {}
+
+const globalFetchingPromise = Promise.all([
+  fetchBttvGlobalEmotes(),
+  fetchGlobalBadges(),
+])
 
 client.addListener('roomstate', async (channel, state) => {
   if (roomState.channel !== channel) {
@@ -32,10 +38,12 @@ client.addListener('roomstate', async (channel, state) => {
       print('State: emote-only mode.')
     }
     await Promise.all([
-      fetcthBttvChannelEmotes(state['room-id']),
-      fetcthFfzChannelEmotes(state['room-id']),
+      globalFetchingPromise,
+      fetchBttvChannelEmotes(state['room-id']),
+      fetchFfzChannelEmotes(state['room-id']),
+      fetchChannelBadges(state['room-id']),
     ])
-    print('BTTV and FFZ channel emotes info fetched.')
+    print('Emotes and Badges info fetched.')
   }
   roomState = state
 })
@@ -52,7 +60,6 @@ export function connect() {
   ].join('</span> <span class="info">') + '</span>')
 
   print('Connecting...')
-  fetcthBttvGlobalEmotes()
 
   client.connect()
 }

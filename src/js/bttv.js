@@ -1,6 +1,6 @@
 export const bttvEmotesMap = new Map()
 
-export async function fetcthBttvGlobalEmotes() {
+export async function fetchBttvGlobalEmotes() {
   const response = await fetch('https://api.betterttv.net/3/cached/emotes/global')
   const data = await response.json()
   data.forEach(({ code, id }) => {
@@ -8,7 +8,7 @@ export async function fetcthBttvGlobalEmotes() {
   })
 }
 
-export async function fetcthBttvChannelEmotes(roomId) {
+export async function fetchBttvChannelEmotes(roomId) {
   const response = await fetch(`https://api.betterttv.net/3/cached/users/twitch/${roomId}`)
   const data = await response.json()
   data.channelEmotes.forEach(({ code, id }) => {
