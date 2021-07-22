@@ -10,6 +10,9 @@ export async function fetchBttvGlobalEmotes() {
 
 export async function fetchBttvChannelEmotes(roomId) {
   const response = await fetch(`https://api.betterttv.net/3/cached/users/twitch/${roomId}`)
+  if (response.status === 404) {
+    return
+  }
   const data = await response.json()
   data.channelEmotes.forEach(({ code, id }) => {
     bttvEmotesMap.set(code, id)
