@@ -2,7 +2,7 @@ export const ffzEmotesMap = new Map()
 
 export async function fetchFfzChannelEmotes(roomId) {
   const response = await fetch(`https://api.betterttv.net/3/cached/frankerfacez/users/twitch/${roomId}`)
-  if (response === 404) {
+  if (response.status === 404) {
     return
   }
   const data = await response.json()
