@@ -23,3 +23,4 @@ export const threshold = Number(qs.get('threshold')) || 100
 export const counterFontSize = Number(qs.get('counter-size')) || 32
 export const counterPadding = Number(qs.get('counter-padding')) || 12
 export const counterHeight = counterFontSize + counterPadding
+export const adaptiveWidth = Boolean(qs.get('adaptive-width')) || true

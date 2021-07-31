@@ -4,7 +4,7 @@ import { fetchFfzChannelEmotes } from './ffz'
 import { fetchGlobalBadges, fetchChannelBadges } from './badge'
 import { print } from './chat'
 import { getColor } from './color'
-import { channel, counterFontSize, fontSize, rawHeight, rawWidth, speed, volume } from './define'
+import { adaptiveWidth, channel, counterFontSize, fontSize, rawHeight, rawWidth, speed, volume } from './define'
 import { parseBadges, parseMessage } from './parser'
 
 const client = new Client({
@@ -58,6 +58,7 @@ export function connect() {
     `height: ${rawHeight}`,
     `volume: ${volume}`,
     `counter-size: ${counterFontSize}`,
+    `adaptive-width: ${adaptiveWidth}`,
   ].join('</span> <span class="info">') + '</span>')
 
   print('Connecting...')
