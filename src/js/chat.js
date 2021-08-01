@@ -60,15 +60,15 @@ function updateRealWidth(content) {
     if (viewHeight <= 0) {
       continue
     }
-    let childWidth = getWidth(child)
-    if (viewHeight <= lineHeight * 1.5 && child.clientHeight >= lineHeight * 1.5) {
-      childWidth = probeWidth(child)
-    }
+    const childWidth = (viewHeight <= lineHeight * 1.5 && child.clientHeight >= lineHeight * 1.5)
+      ? probeWidth(child)
+      : getWidth(child)
+
     maxWidth = Math.max(maxWidth, childWidth)
   }
 
   if (chatRealWidth !== maxWidth) {
-    chatRealWidth = maxWidth
+    chatRealWidth = Math.min(maxWidth, chatWidth)
     updateChatMax()
     updateChatPosition()
   }
