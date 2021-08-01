@@ -21,8 +21,12 @@ body {
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
   font-weight: bold;
   overflow: hidden;
-  word-break: normal;
+  word-wrap: break-word;
+  word-break: break-word; /* OBS built-in browser not support overflow-wrap */
   overflow-wrap: anywhere;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .info {
