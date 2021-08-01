@@ -1,7 +1,7 @@
-import { hitSound, threshold, speed, volume } from './define'
-import { currentTop, currentLeft, maxTop, maxLeft } from './chat'
-import { increaseCount } from './counter'
+import { currentLeft, currentTop, maxLeft, maxTop } from './chat'
 import { corners } from './corner'
+import { increaseCount } from './counter'
+import { hitAreaSize, hitSound, speed, volume } from './define'
 
 let lastHitMs = 0
 const cornerTimers = []
@@ -13,11 +13,39 @@ function delay(cornerId, ms) {
   })
 }
 
+/*
+ corners: 0  1
+          2  3
+*/
+export function getHitCorner() {
+  const hitTop = currentTop <= hitAreaSize
+  const hitBottom = currentTop >= maxTop - hitAreaSize
+  const hitLeft = currentLeft <= hitAreaSize
+  const hitRight = currentLeft >= maxLeft - hitAreaSize
+
+  if (hitTop && hitLeft) {
+    return 0
+  }
+  if (hitTop && hitRight) {
+    return 1
+  }
+  if (hitBottom && hitLeft) {
+    return 2
+  }
+  if (hitBottom && hitRight) {
+    return 3
+  }
+  return -1
+}
+
 export async function checkHitCorner(ms) {
-  if ((ms - lastHitMs) < (threshold / speed)) {
-    const hitTop = currentTop < maxTop / 2
-    const hitLeft = currentLeft < maxLeft / 2
-    const cornerId = hitTop ? (hitLeft ? 0 : 1) : (hitLeft ? 2 : 3)
+  // prevent possible double hit when hitAreaSize is larger than zero
+  if ((ms - lastHitMs) <= 1000 / speed) {
+    return
+  }
+  const cornerId = getHitCorner()
+  if (cornerId !== -1) {
+    lastHitMs = ms
     increaseCount(cornerId)
     const corner = corners[cornerId]
     if (volume > 0) {
@@ -32,9 +60,8 @@ export async function checkHitCorner(ms) {
     await delay(cornerId, 10 * 1000)
     corner.classList.remove('fade')
   }
-  lastHitMs = ms
 }
 
 export function resetLastHit() {
-  lastHitMs = 0
+  lastHitMs = performance.now()
 }

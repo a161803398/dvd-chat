@@ -31,17 +31,16 @@ function step(currentMs) {
 
   if (newTop <= 0 || newTop >= maxTop) {
     dTop *= -1 + (Math.random() - 0.5) * RAND_RATE
-    checkHitCorner(currentMs)
     hasChanged = true
   }
 
   if (newLeft <= 0 || newLeft >= maxLeft) {
     dLeft *= -1 + (Math.random() - 0.5) * RAND_RATE
-    checkHitCorner(currentMs)
     hasChanged = true
   }
 
   if (hasChanged) {
+    checkHitCorner(currentMs)
     // prevent y decay
     if (Math.abs(dTop) < MIN_D) {
       dTop = dTop > 0 ? MIN_D : -MIN_D
