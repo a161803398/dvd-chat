@@ -71,7 +71,7 @@ export function print(html) {
   node.innerHTML = html
   chat.appendChild(node)
 
-  if (node.clientHeight >= lineHeight * 1.5) {
+  if (adaptiveWidth && node.clientHeight >= lineHeight * 1.5) {
     // try to get real width when multiline
 
     const initHeight = node.clientHeight
