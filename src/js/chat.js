@@ -36,14 +36,6 @@ function removeOld(content) {
   content.scrollBy(0, content.scrollHeight)
 }
 
-function getWidth(dom) {
-  if (dom.clientHeight >= lineHeight * 1.5) {
-    return chatWidth
-  } else {
-    return dom.clientWidth
-  }
-}
-
 function probeWidth(dom) {
   const probe = document.createElement('span')
   dom.appendChild(probe)
@@ -56,13 +48,13 @@ function updateRealWidth(content) {
   const { scrollTop, children } = content
   let maxWidth = 0
   for (const child of children) {
-    const viewHeight = child.offsetTop + child.offsetHeight - scrollTop
+    const viewHeight = child.offsetTop + child.clientHeight - scrollTop
     if (viewHeight <= 0) {
       continue
     }
     const childWidth = (viewHeight <= lineHeight * 1.5 && child.clientHeight >= lineHeight * 1.5)
       ? probeWidth(child)
-      : getWidth(child)
+      : child.clientWidth
 
     maxWidth = Math.max(maxWidth, childWidth)
   }
@@ -78,6 +70,29 @@ export function print(html) {
   const node = document.createElement('div')
   node.innerHTML = html
   chat.appendChild(node)
+
+  if (node.clientHeight >= lineHeight * 1.5) {
+    // try to get real width when multiline
+
+    const initHeight = node.clientHeight
+    const initWidth = node.clientWidth
+    const pWidth = probeWidth(node)
+
+    let bestWidth = node.clientWidth
+    for (;;) {
+      node.style.width = `${bestWidth - 1}px`
+      if (node.clientHeight !== initHeight || probeWidth(node) !== pWidth) {
+        break
+      }
+      bestWidth--
+    }
+    if (bestWidth !== initWidth) {
+      node.style.width = `${bestWidth}px`
+    } else {
+      node.style.removeProperty('width')
+    }
+  }
+
   removeOld(chat)
   if (adaptiveWidth) {
     updateRealWidth(chat)
