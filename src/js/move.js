@@ -15,8 +15,6 @@ let dLeft = 1 + (Math.random() - 0.5) * RAND_RATE
 
 normalizeD()
 
-const MIN_D = 0.2
-
 let requestId = 0
 
 function step(currentMs) {
@@ -29,26 +27,19 @@ function step(currentMs) {
 
   let hasChanged = false
 
+  const dSum = Math.abs(dLeft) + Math.abs(dTop)
   if (newTop <= 0 || newTop >= maxTop) {
-    dTop *= -1 + (Math.random() - 0.5) * RAND_RATE
+    dTop *= -1 + (Math.random() - Math.abs(dLeft) / dSum) * RAND_RATE
     hasChanged = true
   }
 
   if (newLeft <= 0 || newLeft >= maxLeft) {
-    dLeft *= -1 + (Math.random() - 0.5) * RAND_RATE
+    dLeft *= -1 + (Math.random() - Math.abs(dTop) / dSum) * RAND_RATE
     hasChanged = true
   }
 
   if (hasChanged) {
     checkHitCorner(currentMs)
-    // prevent y decay
-    if (Math.abs(dTop) < MIN_D) {
-      dTop = dTop > 0 ? MIN_D : -MIN_D
-    }
-    // prevent x decay
-    if (Math.abs(dLeft) < MIN_D) {
-      dLeft = dLeft > 0 ? MIN_D : -MIN_D
-    }
     normalizeD()
   }
 
