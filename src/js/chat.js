@@ -70,6 +70,7 @@ function updateRealWidth(content) {
   if (chatRealWidth !== maxWidth) {
     chatRealWidth = maxWidth
     updateChatMax()
+    updateChatPosition()
   }
 }
 
