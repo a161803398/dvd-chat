@@ -19,7 +19,7 @@ export const chatWidth = Math.floor(rawWidth / lineHeight) * lineHeight
 export const chatHeight = Math.floor(rawHeight / lineHeight) * lineHeight
 
 export const RAND_RATE = 0.1
-export const hitAreaSize = Number(qs.get('hit-area-size')) || 3
+export const hitAreaSize = Number(qs.get('hit-area-size')) || 4
 export const counterFontSize = Number(qs.get('counter-size')) || 32
 export const counterPadding = Number(qs.get('counter-padding')) || 12
 export const counterHeight = counterFontSize + counterPadding
