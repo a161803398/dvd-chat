@@ -14,7 +14,7 @@ export const corners = [
   createCorner(),
 ]
 
-function updateCorner(idx, top, left) {
+function updateCorner(idx: number, top: number, left: number) {
   corners[idx].style.transform = `translate(${left}px, ${top}px)`
 }
 

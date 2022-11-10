@@ -31,7 +31,7 @@ const colorPalette = [
   '#F0E68C',
 ]
 
-function oatHash(str) {
+function oatHash(str = '') {
   let num = 0
   for (let i = 0; i < str.length; i++) {
     num += str.charCodeAt(i)
@@ -40,9 +40,9 @@ function oatHash(str) {
   }
   num += num << 3
   num ^= num >> 11
-  return (num + (num << 15) & 4294967295) >>> 0
+  return ((num + (num << 15)) & 4294967295) >>> 0
 }
 
-export function getColor(name) {
+export function getColor(name: string | undefined) {
   return colorPalette[oatHash(name) % colorPalette.length]
 }

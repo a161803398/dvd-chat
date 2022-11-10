@@ -4,12 +4,12 @@ import { increaseCount } from './counter'
 import { hitAreaSize, hitSound, speed, volume } from './define'
 
 let lastHitMs = 0
-const cornerTimers = []
+const cornerTimers: number[] = []
 
-function delay(cornerId, ms) {
+function delay(cornerId: number, ms: number) {
   clearTimeout(cornerTimers[cornerId])
-  return new Promise(resolve => {
-    cornerTimers[cornerId] = setTimeout(resolve, ms)
+  return new Promise((resolve) => {
+    cornerTimers[cornerId] = setTimeout(resolve, ms) as any
   })
 }
 
@@ -38,9 +38,9 @@ export function getHitCorner() {
   return -1
 }
 
-export async function checkHitCorner(ms) {
+export async function checkHitCorner(ms: number) {
   // prevent possible double hit when hitAreaSize is larger than zero
-  if ((ms - lastHitMs) <= 1000 / speed) {
+  if (ms - lastHitMs <= 1000 / speed) {
     return
   }
   const cornerId = getHitCorner()

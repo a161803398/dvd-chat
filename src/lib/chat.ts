@@ -1,4 +1,11 @@
-import { adaptiveWidth, app, chatHeight, chatWidth, fontSize, lineHeight } from './define'
+import {
+  adaptiveWidth,
+  app,
+  chatHeight,
+  chatWidth,
+  fontSize,
+  lineHeight,
+} from './define'
 import { minMax } from './utils'
 
 export let maxTop = app.clientHeight - chatHeight
@@ -29,14 +36,15 @@ export function updateChatPosition(top = currentTop, left = currentLeft) {
   chat.style.transform = `translate(${currentLeft}px, ${currentTop}px)`
 }
 
-function removeOld(content) {
-  while (content.children.length > 1 && content.scrollTop > chatHeight) { // keep one message or one screen
-    content.removeChild(content.firstChild)
+function removeOld(content: Element) {
+  while (content.children.length > 1 && content.scrollTop > chatHeight) {
+    // keep one message or one screen
+    content.removeChild(content.firstChild!)
   }
   content.scrollBy(0, content.scrollHeight)
 }
 
-function probeWidth(dom) {
+function probeWidth(dom: Element) {
   const probe = document.createElement('span')
   dom.appendChild(probe)
   const { offsetLeft } = probe
@@ -44,17 +52,21 @@ function probeWidth(dom) {
   return offsetLeft
 }
 
-function updateRealWidth(content) {
+function updateRealWidth(content: Element) {
   const { scrollTop, children } = content
   let maxWidth = 0
   for (const child of children) {
+    if (!(child instanceof HTMLElement)) {
+      continue
+    }
     const viewHeight = child.offsetTop + child.clientHeight - scrollTop
     if (viewHeight <= 0) {
       continue
     }
-    const childWidth = (viewHeight <= lineHeight * 1.5 && child.clientHeight >= lineHeight * 1.5)
-      ? probeWidth(child)
-      : child.clientWidth
+    const childWidth =
+      viewHeight <= lineHeight * 1.5 && child.clientHeight >= lineHeight * 1.5
+        ? probeWidth(child)
+        : child.clientWidth
 
     maxWidth = Math.max(maxWidth, childWidth)
   }
@@ -66,7 +78,7 @@ function updateRealWidth(content) {
   }
 }
 
-export function print(html) {
+export function print(html: string) {
   const node = document.createElement('div')
   node.innerHTML = html
   chat.appendChild(node)

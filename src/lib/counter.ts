@@ -27,9 +27,9 @@ const counters = [
   createCornerCounter(false),
 ]
 
-function updateCounterText(idx) {
+function updateCounterText(idx: number) {
   counters[idx].innerHTML = ''
-  counters[idx].appendChild(document.createTextNode(sessionCounts[idx]))
+  counters[idx].appendChild(document.createTextNode(`${sessionCounts[idx]}`))
 
   const totalCount = document.createElement('span')
   totalCount.style.fontSize = `${counterFontSize * 0.7}px`
@@ -41,10 +41,10 @@ function updateCounterText(idx) {
 
 function loadCountHistory() {
   try {
-    const saveData = JSON.parse(localStorage.getItem('counts'))
+    const saveData = JSON.parse(localStorage.getItem('counts')!)
     for (let i = 0; i < counts.length; i++) {
       counts[i] = Number.isFinite(saveData[i]) ? saveData[i] : 0
-      counters[i].innerText = counts[i]
+      counters[i].innerText = `${counts[i]}`
     }
   } catch {
     saveCounts()
@@ -57,7 +57,7 @@ for (let i = 0; i < counts.length; i++) {
   updateCounterText(i)
 }
 
-function updateCounter(idx, top) {
+function updateCounter(idx: number, top: number) {
   counters[idx].style.transform = `translate(0, ${top}px)`
 }
 
@@ -68,7 +68,7 @@ export function updateCounterPosition() {
   updateCounter(3, app.clientHeight - counterHeight)
 }
 
-export function increaseCount(idx) {
+export function increaseCount(idx: number) {
   sessionCounts[idx]++
   counts[idx]++
   updateCounterText(idx)

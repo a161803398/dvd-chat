@@ -2,7 +2,7 @@ import { Howl } from 'howler'
 import hit from '../assets/hit.ogg'
 import { minMax } from './utils'
 
-export const app = document.getElementById('app')
+export const app = document.getElementById('app')!
 
 const qs = new URLSearchParams(location.search)
 export const channel = qs.get('channel') || 'hornydragon'

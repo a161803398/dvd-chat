@@ -1,4 +1,4 @@
-export function escapeHtml(unsafe) {
+export function escapeHtml(unsafe: string) {
   return unsafe
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -7,7 +7,7 @@ export function escapeHtml(unsafe) {
     .replace(/'/g, '&#039;')
 }
 
-export function minMax(num, min, max) {
+export function minMax(num: number, min: number, max: number) {
   if (Number.isNaN(num)) {
     return max
   }

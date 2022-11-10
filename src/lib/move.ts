@@ -1,4 +1,10 @@
-import { currentLeft, currentTop, maxLeft, maxTop, updateChatPosition } from './chat'
+import {
+  currentLeft,
+  currentTop,
+  maxLeft,
+  maxTop,
+  updateChatPosition,
+} from './chat'
 import { RAND_RATE, speed } from './define'
 import { checkHitCorner } from './hitCheck'
 
@@ -17,9 +23,9 @@ normalizeD()
 
 let requestId = 0
 
-function step(currentMs) {
+function step(currentMs: number) {
   const passMs = currentMs - lastMs
-  const dMove = speed * passMs / 10
+  const dMove = (speed * passMs) / 10
   const newTop = currentTop + dTop * dMove
   const newLeft = currentLeft + dLeft * dMove
 
